@@ -1,7 +1,7 @@
 const Mongoose = require("mongoose");
 const Schema = Mongoose.Schema;
 
-const Exercise = require("./Exercise.js");
+const { Exercise, ExerciseSchema } = require("./Exercise.js");
 
 const WorkoutSchema = new Schema(
     {
@@ -10,8 +10,8 @@ const WorkoutSchema = new Schema(
             default: Date.now
         },
         exercises: [{
-            type: Schema.ObjectId,
-            ref: "Exercise"
+            type: ExerciseSchema,
+            default: Exercise
         }]
     }
 );
