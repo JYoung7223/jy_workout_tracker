@@ -33,8 +33,10 @@ Router.get("/", async (req, res) => {
 
 // Create Workout
 Router.post("/", async (req, res) => {
-    console.log(`Createing Workout:${JSON.stringify(req.body)}`);
-    Workout.create(req.body)
+    const newWorkout = new Workout(req.body);
+    newWorkout.setTotalDuration();
+    console.log(`Creating Workout:${JSON.stringify(newWorkout)}`);
+    Workout.create(newWorkout)
         .then((results)=>{
             console.log(`Created Workout:${results}`);
             res.status(200).json(results);
@@ -55,6 +57,10 @@ Router.put("/:id", async (req, res) => {
         { $push: 
             {
                 exercises: req.body
+            },
+            $inc:
+            {
+                totalDuration: req.body.duration
             }
         })
         .then((workResults)=>{

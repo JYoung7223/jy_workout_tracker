@@ -12,9 +12,17 @@ const WorkoutSchema = new Schema(
         exercises: [{
             type: ExerciseSchema,
             default: Exercise
-        }]
+        }],
+        totalDuration: Number
     }
 );
+WorkoutSchema.methods.setTotalDuration = function() {
+    this.totalDuration = 0;
+    for(const exercise in this.exercises){
+        totalDuration += exercise.duration;
+    }
+    return this.totalDuration;
+};
 
 const Workout = Mongoose.model("Workout", WorkoutSchema);
 
