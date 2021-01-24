@@ -1,5 +1,5 @@
 const Router = require("express").Router();
-const { Mongoose } = require("mongoose");
+// const { Mongoose } = require("mongoose");
 const { Workout } = require("../../models");
 
 // Get Last 7 Workouts
@@ -7,7 +7,12 @@ Router.get("/range", async (req, res) => {
     console.log("Getting Last 7 Workouts");
     Workout.find({}).sort({ day: -1}).limit(7)
         .then((results) => {
-            console.log(`Results:${results}`);
+            results = results.map((workout)=>{
+                const myWorkout = new Workout(workout);
+                myWorkout.setTotalDuration();
+                return myWorkout;
+            });
+            console.log(`Results:${results}`);                    
             res.status(200).json(results);
         })
         .catch((error)=>{
@@ -22,7 +27,30 @@ Router.get("/", async (req, res) => {
     console.log("Getting Last Workout");
     Workout.find({}).sort({ day: -1}).limit(1)
         .then((results) => {
-            console.log(`Results:${results}`);
+            results = results.map((workout)=>{
+                const myWorkout = new Workout(workout);
+                myWorkout.setTotalDuration();
+                return myWorkout;
+            });
+            console.log(`Results:${results}`);                    
+            res.status(200).json(results);
+        })
+        .catch((error)=>{
+            console.log(`Error: ${error}`);
+            res.status(500).json(error);
+        });
+});
+// Get the Last Workout
+Router.get("/:id", async (req, res) => {    
+    console.log(`Getting Workout:${req.params.id}`);
+    Workout.findById(req.params.id).sort({ day: -1}).limit(1)
+        .then((results) => {
+            results = results.map((workout)=>{
+                const myWorkout = new Workout(workout);
+                myWorkout.setTotalDuration();
+                return myWorkout;
+            });
+            console.log(`Results:${results}`);                    
             res.status(200).json(results);
         })
         .catch((error)=>{

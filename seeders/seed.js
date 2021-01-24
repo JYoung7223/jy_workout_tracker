@@ -126,7 +126,15 @@ let workoutSeed = [
 ];
 
 db.Workout.deleteMany({})
-  .then(() => db.Workout.collection.insertMany(workoutSeed))
+  .then(() => 
+  {
+    workoutSeed = workoutSeed.map((workout)=>{
+      const myWorkout = new db.Workout(workout);
+      myWorkout.setTotalDuration();
+      return myWorkout;
+    });
+    return db.Workout.collection.insertMany(workoutSeed);
+  })
   .then(data => {
     console.log(data.result.n + " records inserted!");
     process.exit(0);
@@ -135,3 +143,6 @@ db.Workout.deleteMany({})
     console.error(err);
     process.exit(1);
   });
+
+
+  

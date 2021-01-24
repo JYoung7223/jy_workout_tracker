@@ -18,8 +18,8 @@ const WorkoutSchema = new Schema(
 );
 WorkoutSchema.methods.setTotalDuration = function() {
     this.totalDuration = 0;
-    for(const exercise in this.exercises){
-        totalDuration += exercise.duration;
+    for(const exercise of this.exercises){
+        this.totalDuration += exercise.duration;
     }
     return this.totalDuration;
 };
